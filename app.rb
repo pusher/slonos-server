@@ -21,6 +21,10 @@ helpers do
       secret: ENV['PUSHER_APP_SECRET'],
     })
   end
+
+  def say(text)
+    JSON.dump({ text: text })
+  end
 end
 
 get '/' do
@@ -32,7 +36,7 @@ post '/slack_in' do
 
   match = /\\([^ ]+) ?(.*)?/.match(req.message)
 
-  return 'Unrecognised command' unless match
+  return say('Unrecognised command') unless match
 
   subcommand = match[1]
   case subcommand
@@ -47,7 +51,7 @@ post '/slack_in' do
     when 'down'
       pusher.trigger('commands', 'volume-down', {})
     else
-      return JSON.dump({ text: "Unrecognised volume instruction #{match[2]}" })
+      return say("Unrecognised volume instruction #{match[2]}")
     end
   when 'louder'
     pusher.trigger('commands', 'volume-up', {})
@@ -55,11 +59,11 @@ post '/slack_in' do
     pusher.trigger('commands', 'volume-down', {})
   when 'add'
     term = match[2]
-    return 'No search term!' unless term
+    return say('No search term!') unless term
 
     results = spotify.search(:track, term)
 
-    return 'Sorry, nothing found' unless results['tracks']
+    return say('Sorry, nothing found') unless results['tracks']
 
     pusher.trigger(
       'commands',
@@ -70,9 +74,9 @@ post '/slack_in' do
       }
     )
 
-    return JSON.dump({text: "Queued #{results['tracks']['items'][0]['name']}"})
+    return say("Queued #{results['tracks']['items'][0]['name']}")
   else
-    return "Unrecognised subcommand '#{subcommand}'"
+    return say("Unrecognised subcommand '#{subcommand}'")
   end
 
   return 201
