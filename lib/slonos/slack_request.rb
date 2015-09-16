@@ -5,7 +5,7 @@ module Slonos
     end
 
     def parse
-      @parsed ||= Hash[ @body.lines.map { |l| l.split('=') } ]
+      @parsed ||= Hash[ URI.decode_www_form(@body) ]
     end
 
     def message
