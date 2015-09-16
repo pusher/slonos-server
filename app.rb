@@ -40,6 +40,19 @@ post '/slack_in' do
     pusher.trigger('commands', 'play', {})
   when 'pause'
     pusher.trigger('commands', 'pause', {})
+  when 'vol', 'volume'
+    case match[2]
+    when 'up'
+      pusher.trigger('commands', 'volume-up', {})
+    when 'down'
+      pusher.trigger('commands', 'volume-down', {})
+    else
+      return JSON.dump({ text: "Unrecognised volume instruction #{match[2]}" })
+    end
+  when 'louder'
+    pusher.trigger('commands', 'volume-up', {})
+  when 'quieter'
+    pusher.trigger('commands', 'volume-down', {})
   when 'add'
     term = match[2]
     return 'No search term!' unless term
