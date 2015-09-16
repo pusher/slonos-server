@@ -7,8 +7,11 @@ module Slonos
     end
 
     def parse
-      @parsed ||= Hash[ URI.decode_www_form(@body) ]
+      @parsed if @parsed
+
+      @parsed = Hash[ URI.decode_www_form(@body) ]
       raise 'Invalid request' if @token && (@parsed['token'] != @token)
+      return @parsed
     end
 
     def message
