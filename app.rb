@@ -57,6 +57,8 @@ post '/slack_in' do
     pusher.trigger('commands', 'volume-up', {})
   when 'quieter'
     pusher.trigger('commands', 'volume-down', {})
+  when 'cancel', 'remove'
+    pusher.trigger('commands', 'remove', {})
   when 'add'
     term = match[2]
     return say('No search term!') unless term
