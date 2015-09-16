@@ -67,16 +67,18 @@ post '/slack_in' do
 
     return say('Sorry, nothing found') unless results['tracks']
 
+    track = Slonos::SpotifyTrack.new(results['tracks']['items'][0])
+
     pusher.trigger(
       'commands',
       'add',
       {
-        id: results['tracks']['items'][0]['id'],
-        name: results['tracks']['items'][0]['name']
+        id: track.id
+        name: track.name
       }
     )
 
-    return say("Queued #{results['tracks']['items'][0]['name']}")
+    return say("Queued #{track.name} from #{track.album_name} by #{track.artist_name}")
   else
     return say("Unrecognised subcommand '#{subcommand}'")
   end
