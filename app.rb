@@ -28,7 +28,7 @@ get '/' do
 end
 
 post '/slack_in' do
-  req = Slonos::SlackRequest.new(request.body.read)
+  req = Slonos::SlackRequest.new(request.body.read, ENV['SLACK_TOKEN'])
 
   match = /\\([^ ]+) ?(.*)?/.match(req.message)
 
