@@ -56,7 +56,11 @@ post '/slack_in' do
         name: results['tracks']['items'][0]['name']
       }
     )
+
+    return JSON.dump({text: "Queued #{results['tracks']['items'][0]['name']}"})
   else
     return "Unrecognised subcommand '#{subcommand}'"
   end
+
+  return 201
 end
