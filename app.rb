@@ -73,7 +73,7 @@ post '/slack_in' do
       'commands',
       'add',
       {
-        id: track.id
+        id: track.id,
         name: track.name
       }
     )
