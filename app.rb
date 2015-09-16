@@ -30,9 +30,9 @@ end
 post '/slack_in' do
   req = Slonos::SlackRequest.new(request.body.read)
 
-  match = /!music ([^ ]+) ?(.*)?/.match(req.message)
+  match = /\\([^ ]+) ?(.*)?/.match(req.message)
 
-  return 'Unrecognised command (does not start with !music)' unless match
+  return 'Unrecognised command' unless match
 
   subcommand = match[1]
   case subcommand
