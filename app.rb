@@ -85,3 +85,11 @@ post '/slack_in' do
 
   return 201
 end
+
+post '/pusher_auth' do
+  return 403 unless params['channel'] == 'private-commands'
+  return 403 unless params['client_token'] == ENV['CLIENT_TOKEN']
+  return JSON.dump(
+    pusher['private-commands'].authenticate(params['socket_id'])
+  )
+end
