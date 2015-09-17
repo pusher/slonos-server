@@ -32,9 +32,10 @@ get '/' do
 end
 
 post '/slack_in' do
-  req = Slonos::SlackRequest.new(request.body.read, ENV['SLACK_TOKEN'])
+  return 403 unless params['token'] && params['token'] == ENV['SLACK_TOKEN']
+  return 400 unless params['text']
 
-  match = /\\([^ ]+) ?(.*)?/.match(req.message)
+  match = /\\([^ ]+) ?(.*)?/.match(params['text'])
 
   return say('Unrecognised command') unless match
 
