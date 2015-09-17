@@ -22,6 +22,10 @@ helpers do
     })
   end
 
+  def channel_command(command, args = {})
+    pusher.trigger('private-commands', command, args)
+  end
+
   def say(text)
     JSON.dump({ text: text })
   end
@@ -42,42 +46,33 @@ post '/slack_in' do
   subcommand = match[1]
   case subcommand
   when 'play'
-    pusher.trigger('commands', 'play', {})
+    channel_command('play')
   when 'pause'
-    pusher.trigger('commands', 'pause', {})
+    channel_command('pause')
   when 'vol', 'volume'
     case match[2]
     when 'up'
-      pusher.trigger('commands', 'volume-up', {})
+      channel_command('volume-up')
     when 'down'
-      pusher.trigger('commands', 'volume-down', {})
+      channel_command('volume-down')
     else
       return say("Unrecognised volume instruction #{match[2]}")
     end
   when 'louder'
-    pusher.trigger('commands', 'volume-up', {})
+    channel_command('volume-up')
   when 'quieter'
-    pusher.trigger('commands', 'volume-down', {})
+    channel_command('volume-down')
   when 'cancel', 'remove'
-    pusher.trigger('commands', 'remove', {})
+    channel_command('remove')
   when 'add'
     term = match[2]
     return say('No search term!') unless term
 
     results = spotify.search(:track, term)
-
     return say('Sorry, nothing found') unless results['tracks']
 
     track = Slonos::SpotifyTrack.new(results['tracks']['items'][0])
-
-    pusher.trigger(
-      'commands',
-      'add',
-      {
-        id: track.id,
-        name: track.name
-      }
-    )
+    channel_command('add', { id: track.id, name: track.name })
 
     return say("Queued #{track.name} from #{track.album_name} by #{track.artist_name}")
   else
