@@ -74,11 +74,11 @@ post '/slack_in' do
     return say('Sorry, nothing found') unless results['tracks']
 
     track = Slonos::SpotifyTrack.new(results['tracks']['items'][0])
-    channel_command('add', { id: track.id, name: track.name })
+    channel_command('add', { id: track.id, name: track.name, parent: track.album_id })
 
     return say("Queued #{track.name} from #{track.album_name} by #{track.artist_name}")
   else
-    return say("Unrecognised subcommand '#{subcommand}'")
+    return say("Unrecognised command '#{subcommand}'")
   end
 
   return 201

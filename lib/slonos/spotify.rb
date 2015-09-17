@@ -31,6 +31,10 @@ module Slonos
       @data['album']['name']
     end
 
+    def album_id
+      @data['album']['id']
+    end
+
     def artist_name
       @data['artists'].map { |a| a['name'] }.join(', ')
     end
