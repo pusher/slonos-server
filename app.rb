@@ -64,6 +64,8 @@ post '/slack_in' do
     channel_command('volume-down')
   when 'cancel', 'remove'
     channel_command('remove')
+  when '?', 'now-playing'
+    channel_command('now-playing')
   when 'add'
     term = match[2]
     return say('No search term!') unless term
