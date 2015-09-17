@@ -73,7 +73,12 @@ post '/slack_in' do
     return say('No search term!') unless term
 
     results = spotify.search(:track, term)
-    return say('Sorry, nothing found') unless results['tracks']
+
+    unless results['tracks'] &&
+        results['tracks']['items'] &&
+        results['tracks']['items'][0]
+      return say('Sorry, nothing found')
+    end
 
     track = Slonos::SpotifyTrack.new(results['tracks']['items'][0])
     channel_command('add', { id: track.id, name: track.name, parent: track.album_id })
