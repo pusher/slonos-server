@@ -66,6 +66,8 @@ post '/slack_in' do
     channel_command('remove')
   when '?', 'now-playing'
     channel_command('now-playing')
+  when 'queue'
+    channel_command('queue')
   when 'add'
     term = match[2]
     return say('No search term!') unless term
