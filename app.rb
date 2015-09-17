@@ -95,3 +95,22 @@ post '/pusher_auth' do
     pusher['private-commands'].authenticate(params['socket_id'])
   )
 end
+
+post '/say' do
+  return 403 unless params['client_token'] && params['client_token'] == ENV['CLIENT_TOKEN']
+  return 400 unless params['text']
+
+  body = {
+    text: params['text']
+  }
+
+  body[:channel] = params['channel'] if params['channel']
+
+  response = Excon.post(
+    ENV['SLACK_WEBHOOK_URL'],
+    headers: { 'Content-Type' => 'application/json' },
+    body: JSON.dump(body)
+  )
+
+  return response.status
+end
