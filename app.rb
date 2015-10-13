@@ -64,6 +64,8 @@ post '/slack_in' do
     channel_command('volume-down')
   when 'cancel', 'remove'
     channel_command('remove')
+  when 'skip'
+    channel_command('skip')
   when '?', 'now-playing'
     channel_command('now-playing')
   when 'queue'
