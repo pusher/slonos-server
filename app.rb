@@ -66,6 +66,8 @@ post '/slack_in' do
     channel_command('remove')
   when 'skip'
     channel_command('skip')
+  when 'beginning', 'restart-queue'
+    channel_command('restart-queue')
   when '?', 'now-playing'
     channel_command('now-playing')
   when 'queue'
